@@ -1,0 +1,21 @@
+{
+  "name": "node-express-api",
+  "description": "Api simple con Node y Express",
+  "version": "1.0.0",
+  "private": true,
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "Google LLC",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "6.9"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
