@@ -1,11 +1,11 @@
 import express from "express"
-import * as vehiculosController from "../controllers/vehiculos.controller.js";
+import * as controllers from "../controllers/vehiculos.controller.js";
 
 const route = express.Router()
 
-route.get("/vehiculos", vehiculosController.getVehiculos);
-// route.get("/vehiculos/:id", vehiculosController.getVehiculoId);
+route.get("/vehiculos", controllers.getVehiculos)
+route.get("/vehiculos/:id", controllers.getVehiculoId)
+route.get("/vehiculo/nuevo", controllers.formVehiculo)
+route.post("/vehiculo/nuevo", controllers.agregarVehiculo)
 
 export default route
-
-/* Vehículos */

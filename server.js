@@ -8,8 +8,8 @@ const app = express();
 app.use(views);
 
 app.get('/', (req, res) => {
-  const name = process.env.NAME || 'Lucas, Valentino y Yoel';
-  res.send(`Hola ${name}!`);
+  const name = process.env.NAME || '<a href="/vehiculos">Vehículos</a>';
+  res.send(`${name}!`);
 });
 
 
