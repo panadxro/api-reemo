@@ -1,14 +1,14 @@
-import * as service from "../../services/vehiculos.service"
+import * as service from "../../services/vehiculos.service.js"
 
 function getVehiculos(req, res){
     const filtros = req.query
-    service.getProductos(filtros)
+    service.getVehiculos(filtros)
         .then( (vehiculos) => res.status(200).json(vehiculos) )
 }
 
 function getVehiculosId(req, res){
     const id = req.params.id
-    service.getProductoId(id)
+    service.getVehiculoId(id)
         .then( (vehiculos) => res.status(200).json(vehiculos) )
 }
 

@@ -1,7 +1,6 @@
-// Contraseña Atlas: EXB12;W!XoBy
-
 import express from 'express';
 import views from './routes/views.routes.js';
+import apiRoute from './api/routes/views.routes.js'
 
 const app = express();
 
@@ -10,6 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(views);
+app.use('/api', apiRoute)
 
 app.get('/', (req, res) => {
   const name = process.env.NAME || '<a href="/vehiculos">Vehículos</a>';
