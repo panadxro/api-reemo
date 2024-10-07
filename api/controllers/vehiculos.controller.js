@@ -1,54 +1,53 @@
-import * as service from "../../services/productos.service.js"
+import * as service from "../../services/vehiculos.service"
 
-function getProductos(req, res){
+function getVehiculos(req, res){
     const filtros = req.query
     service.getProductos(filtros)
-        .then( (zapatillas) => res.status(200).json(zapatillas) )
+        .then( (vehiculos) => res.status(200).json(vehiculos) )
 }
 
-function getProductoId(req, res){
+function getVehiculosId(req, res){
     const id = req.params.id
     service.getProductoId(id)
-        .then( (zapatilla) => res.status(200).json(zapatilla) )
+        .then( (vehiculos) => res.status(200).json(vehiculos) )
 }
 
-function crearProducto(req, res){
-    const zapatilla = req.body
-    service.agregarProducto(zapatilla)
-        .then( (zapatillas) => res.status(201).json(zapatillas) )
+function crearVehiculo(req, res){
+    const vehiculo = req.body
+    service.agregarVehiculo(vehiculo)
+        .then( (vehiculo) => res.status(201).json(vehiculo) )
 }
 
-function borrarProducto(req, res){
+function borrarVehiculo(req, res){
     const id = req.params.id
-    console.log("LLEGO EL BORRAR", req.params.id)
-    service.borrarProductoLogico(id)
+    service.borrarVehiculoLogico(id)
         .then( () => res.status(204).json(id) )
         .catch( () => res.status(404).json({mensaje: "Recurso no encontrado"}) )
 }
 
-function reemplazarProducto(req, res){
+function reemplazarVehiculo(req, res){
     const id = req.params.id
-    const zapatilla = req.body
-    service.modificarZapatilla(id, zapatilla)
-        .then( (zapatilla) => res.status(204).json(zapatilla) )
+    const vehiculo = req.body
+    service.modificarVehiculo(id, vehiculo)
+        .then( (vehiculo) => res.status(204).json(vehiculo) )
         .catch( () => res.status(404).json({mensaje: "Recurso no encontrado"}) )
 }
 
-function actualizarProducto(req, res){
+function actualizarVehiculo(req, res){
     const id = req.params.id
-    const zapatilla = req.body
+    const vehiculo = req.body
 
-    service.actualizarZapatilla(id, zapatilla)
-    .then( (zapatilla) => res.status(204).json(zapatilla) )
+    service.actualizarVehiculo(id, vehiculo)
+    .then( (vehiculo) => res.status(204).json(vehiculo) )
     .catch( () => res.status(404).json({mensaje: "Recurso no encontrado"}) )
 
 }
 
 export {
-    getProductos,
-    getProductoId,
-    crearProducto,
-    borrarProducto,
-    reemplazarProducto,
-    actualizarProducto
+    getVehiculos,
+    getVehiculosId,
+    crearVehiculo,
+    borrarVehiculo,
+    reemplazarVehiculo,
+    actualizarVehiculo
 }
