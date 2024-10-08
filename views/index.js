@@ -83,7 +83,10 @@ function crearListadoMarca(vehiculos){
             <a href="/vehiculo/modificar/${vehiculos[i]._id}">Modificar</a>
           </li>`
     }
-    html += "</ul>"
+    html += `</ul>
+    <a href="/vehiculos" >atras</a>
+    
+    `
     return html
   }
 } 
@@ -199,7 +202,7 @@ function editarVehiculo(vehiculo) {
   `;
 }
 
-function createUsuarioDetalle(usuario, vehiculos) {
+function createUsuarioDetalle(usuario, vehiculosDisponibles) {
   console.log(usuario);
   let html = `
   <p>ID: ${usuario._id}</p>
@@ -217,10 +220,27 @@ function createUsuarioDetalle(usuario, vehiculos) {
           <a href="/vehiculos/${usuario.historial[i]._id}">Ver</a>
         </li>`;
     }
-    html += `</ul>
-    <a href="/usuarios" >atras</a>
-    `;
-  }
+    html += `</ul>`
+    html += `<a href="/usuarios">Atrás</a>`;
+    }
+    html += `<h3>Autos disponibles</h3>`;
+
+    if (vehiculosDisponibles.length === 0) {
+      html += `<p>No hay vehículos disponibles actualmente.</p>`;
+    } else {
+      html += "<ul>";
+      for (let i = 0; i < vehiculosDisponibles.length; i++) {
+        html += `
+          <li>
+          <form action="/usuario/${usuario._id}/historial" method="POST">
+              <input value="${vehiculosDisponibles[i]._id}" name="_id" id="historial" type="hidden">
+              <label for="historial">${vehiculosDisponibles[i].marca} ${vehiculosDisponibles[i].modelo} - ${vehiculosDisponibles[i].precio}</label>
+              <button type="submit">Reservar</button>
+            </form>
+          </li>`;
+      }
+      html += "</ul>";
+    }
 
   return html;
 }

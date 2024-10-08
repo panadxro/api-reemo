@@ -12,8 +12,9 @@ route.get("/vehiculo/eliminar/:id", controllers.eliminarVehiculo)
 route.get("/vehiculo/editar/:id", controllers.formEditarVehiculo)
 route.post("/vehiculo/editar/:id", controllers.editarVehiculo)
 route.get("/vehiculo", controllers.getVehiculosMarca)
+
 route.get("/usuarios", usuarios.getUsuarios)
 route.get("/usuario/:id", usuarios.getUsuarioId)
-
+route.post("/usuario/:id/historial", usuarios.agregarAlHistorial)
 
 export default route

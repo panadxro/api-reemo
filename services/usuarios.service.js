@@ -34,7 +34,7 @@ export async function getUsuarioId(id){
 export async function agregarAlHistorial(idUsuario, vehiculo){
     await cliente.connect()
     const vehiculoCompleto = await db.collection( "vehiculos" ).findOne({ _id: ObjectId.createFromHexString(vehiculo._id) })
-    
+    console.log(vehiculoCompleto)
     const resultado = await db.collection("usuarios").updateOne(
         { _id: ObjectId.createFromHexString(idUsuario) },
         // { $push: {carrito: {$each: vehiculoCompleto}} } //...vehiculoCompleto

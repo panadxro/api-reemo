@@ -23,7 +23,7 @@ export function borrarUsuario(req, res){
 export function agregarAlHistorial(req, res){
     const usuario = req.params.idUsuario
     const vehiculo = req.body
-    console.log("LLEGUE", usuario)
+    console.log("LLEGUE", usuario, vehiculo)
     service.agregarAlHistorial(usuario, vehiculo)
         .then( usuario => res.status(201).json(usuario) )
         .catch( () => res.status(404).json({ mensaje: "No se pudo agregar a carrito" }) )
