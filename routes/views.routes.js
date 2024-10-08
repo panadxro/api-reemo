@@ -10,5 +10,6 @@ route.post("/vehiculo/nuevo", controllers.agregarVehiculo)
 route.get("/vehiculo/eliminar/:id", controllers.eliminarVehiculo)
 route.get("/vehiculo/editar/:id", controllers.formEditarVehiculo)
 route.post("/vehiculo/editar/:id", controllers.editarVehiculo)
+route.get("/vehiculo", controllers.getVehiculosMarca)
 
 export default route

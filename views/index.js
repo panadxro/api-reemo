@@ -1,108 +1,221 @@
-function createPage(titulo, contenido){ 
-    return `
-    <!DOCTYPE html>
-    <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${titulo}</title>
-        </head>
-        <body>
-            <h1>Vehículos</h1>
-            ${contenido}
-        </body>
-    </html>
-    `
-  }
-  
-  function crearListado(vehiculos){
-    let html = "<a href='/vehiculo/nuevo' >Nuevo Vehículo</a>"
-    html += "<ul>"
-    for( let i = 0; i < vehiculos.length ; i++ ){
-        html += "<li>"+ vehiculos[i].marca + ' ' + vehiculos[i].modelo + "<a href="+ "/vehiculos/" + vehiculos[i]._id +" >Ver</a>"+ "<a href="+ "/vehiculo/eliminar/" + vehiculos[i]._id +" >Eliminar</a>" + "<a href="+ "/vehiculo/editar/" + vehiculos[i]._id +" >Modificar</a>" + "</li>"
-    }
-    html += "</ul>"
-    return html
-  } 
-  
-  function createPaginaDetalle(vehiculo){
-  console.log(vehiculo)
+function createPage(titulo, contenido) {
   return `
-      <p>ID: ${vehiculo._id}</p>
-      <p>MARCA: ${vehiculo.marca}</p>
-      <p>MODELO: ${vehiculo.modelo}</p>
-      <p>COLOR: ${vehiculo.colores}</p>
-      <p>WEB: <a href="${vehiculo.link}" target="_blank">${vehiculo.link}</a></p>
-      <p>IMAGEN: ${vehiculo.img}</p>
-      <p>AÑO: ${vehiculo.año}</p>
-      <p>PRECIO: ${vehiculo.precio}</p>
-      <p>DESCRIPCION: ${vehiculo.descripcion}</p>
-  
-      <a href="/vehiculos" >atras</a>
-  `
-  }
-  
-  function nuevoVehiculo() {
-    return `
-      <h1>Agregar Vehículo</h1>
-      <form action="/vehiculo/nuevo" method="POST">
-    
-          <input type="text" name="marca" placeholder="Marca" required>
-          <input type="text" name="modelo" placeholder="Modelo" required>
-    
-          <select name="colores" placeholder="Color" required>
-            <option value="Blanco">Blanco</option>
-            <option value="Negro">Negro</option>
-            <option value="Gris">Gris</option>
-            <option value="Rojo">Rojo</option>
-            <option value="Azul">Azul</option>
-            <option value="Verde">Verde</option>
-          </select>
-    
-          <input type="text" name="link" placeholder="Link">
-          <input type="number" name="año" placeholder="Año">
-          <input type="text" name="img" placeholder="Imagen ruta">
-          <input type="number" name="precio" placeholder="Precio">
-
-          <textarea name="descripcion" placeholder="Descripción"></textarea>
-    
-          <button type="submit">Agregar</button>
-      </form>
-    `;
-  }
-
-
-  function editarVehiculo(vehiculo){
-    return `
-    <h1>Editar Vehículo</h1>
-
-    <form action="/vehiculo/editar/${vehiculo._id}" method="POST">
-    
-          <input value="${vehiculo.marca}" type="text" name="marca" placeholder="Marca" required>
-          <input value="${vehiculo.modelo}" type="text" name="modelo" placeholder="Modelo" required>
-    
-          <select name="colores" placeholder="Color" required>
-            <option value="Blanco" ${vehiculo.colores === 'Blanco' ? 'selected' : ''}>Blanco</option>
-            <option value="Negro" ${vehiculo.colores === 'Negro' ? 'selected' : ''}>Negro</option>
-            <option value="Gris" ${vehiculo.colores === 'Gris' ? 'selected' : ''}>Gris</option>
-            <option value="Rojo" ${vehiculo.colores === 'Rojo' ? 'selected' : ''}>Rojo</option>
-            <option value="Azul" ${vehiculo.colores === 'Azul' ? 'selected' : ''}>Azul</option>
-            <option value="Verde" ${vehiculo.colores === 'Verde' ? 'selected' : ''}>Verde</option>
+  <!DOCTYPE html>
+  <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${titulo}</title>
+    </head>
+    <body>
+    <nav>
+      <a href="/vehiculos">Inicio</a>
+      <form action="/vehiculo" method="GET">
+        <label for="marca">Selecciona una marca:</label>
+        <select name="marca" id="marca">
+          <option value="Toyota">Toyota</option>
+          <option value="Volkswagen">Volkswagen</option>
+          <option value="Fiat">Fiat</option>
+          <option value="Chevrolet">Chevrolet</option>
+          <option value="Renault">Renault</option>
+          <option value="Ford">Ford</option>
+          <option value="Nissan">Nissan</option>
+          <option value="Honda">Honda</option>
+          <option value="Jeep">Jeep</option>
         </select>
-    
-          <input value="${vehiculo.link}" type="text" name="link" placeholder="Link">
-          <input value="${vehiculo.año}" type="number" name="año" placeholder="Año">
-          <input value="${vehiculo.img}" type="text" name="img" placeholder="Imagen ruta">
-          <input value="${vehiculo.precio}" type="number" name="precio" placeholder="Precio">
-
-          <textarea name="descripcion" placeholder="Descripción">${vehiculo.descripcion}</textarea>
-    
-          <button type="submit">Editar</button>
+        <button type="submit">Buscar</button>
       </form>
-    
-    
-    `
+      <a href='/vehiculo/nuevo' >Nuevo Vehículo</a>
+    </nav>
+      <h1>Vehículos</h1>
+      ${contenido}
+    </body>
+  </html>
+  `;
 }
+
+function crearListado(vehiculos, filtros={}) {
+  let html = `<a href='/vehiculo/nuevo'>Nuevo Vehículo</a>`;
   
-  export default { createPage, crearListado, createPaginaDetalle, nuevoVehiculo, editarVehiculo };
-  export { createPage, crearListado, createPaginaDetalle, nuevoVehiculo, editarVehiculo };
+  html += `
+  <form method="GET" action="/vehiculos">
+      <label for="año">Año:</label>
+      <input type="number" name="año" id="año" value="${filtros.año || ''}">
+    <button type="submit">Buscar</button>
+  </form>
+
+  <form action="/vehiculos" method="GET">  
+    <label for="precioMenor">Precio Menor:</label>
+    <input type="number" name="precioMenor" id="precioMenor" value="${
+      filtros.precioMenor || "6500"
+    }">
+  
+    <label for="precioMayor">Precio Mayor:</label>
+    <input type="number" name="precioMayor" id="precioMayor" value="${
+      filtros.precioMayor || "30000"
+    }">
+  
+    <button type="submit">Filtrar</button>
+  </form>
+  `;
+
+  if (vehiculos.length === 0) {
+    html += `<p>No se encontraron vehículos con esas especificaciones.</p>`;
+  } else {
+    html += "<ul>";
+    for (let i = 0; i < vehiculos.length; i++) {
+      html +=
+        "<li>" +
+        vehiculos[i].marca +
+        " " +
+        vehiculos[i].modelo +
+        " - Precio: " + vehiculos[i].precio +
+        "     <a href=" +
+        "/vehiculos/" +
+        vehiculos[i]._id +
+        " >Ver</a>" +
+        "     <a href=" +
+        "/vehiculo/eliminar/" +
+        vehiculos[i]._id +
+        " >Eliminar</a>" +
+        "     <a href=" +
+        "/vehiculo/editar/" +
+        vehiculos[i]._id +
+        " >Modificar</a>" +
+        "</li>";
+    }
+    html += "</ul>";
+  }
+
+  return html;
+}
+
+function crearListadoMarca(vehiculos){
+  let html = "<ul>"
+  for( let i = 0; i < vehiculos.length ; i++ ){
+      html += "<li>"+ vehiculos[i].marca + ' ' + vehiculos[i].modelo + "<a href="+ "/vehiculos/" + vehiculos[i]._id +" >Ver</a>"+ "<a href="+ "/vehiculo/eliminar/" + vehiculos[i]._id +" >Eliminar</a>" + "<a href="+ "/vehiculo/modificar/" + vehiculos[i]._id +" >Modificar</a>" + "</li>"
+  }
+  html += "</ul>"
+  return html
+} 
+
+function createPaginaDetalle(vehiculo) {
+  console.log(vehiculo);
+  return `
+  <p>ID: ${vehiculo._id}</p>
+  <p>MARCA: ${vehiculo.marca}</p>
+  <p>MODELO: ${vehiculo.modelo}</p>
+  <p>COLOR: ${vehiculo.colores}</p>
+  <p>WEB: <a href="${vehiculo.link}" target="_blank">${vehiculo.link}</a></p>
+  <p>IMAGEN: ${vehiculo.img}</p>
+  <p>AÑO: ${vehiculo.año}</p>
+  <p>PRECIO: ${vehiculo.precio}</p>
+  <p>DESCRIPCION: ${vehiculo.descripcion}</p>
+
+  <a href="/vehiculos" >atras</a>
+`;
+}
+
+function nuevoVehiculo() {
+  return `
+  <h1>Agregar Vehículo</h1>
+  <form action="/vehiculo/nuevo" method="POST">
+    <input type="text" name="marca" placeholder="Marca" required>
+    <input type="text" name="modelo" placeholder="Modelo" required>
+
+    <select name="colores" placeholder="Color" required>
+      <option value="Blanco">Blanco</option>
+      <option value="Negro">Negro</option>
+      <option value="Gris">Gris</option>
+      <option value="Rojo">Rojo</option>
+      <option value="Azul">Azul</option>
+      <option value="Verde">Verde</option>
+    </select>
+
+    <input type="text" name="link" placeholder="Link">
+    <input type="number" name="año" placeholder="Año">
+    <input type="text" name="img" placeholder="Imagen ruta">
+    <input type="number" name="precio" placeholder="Precio">
+
+    <textarea name="descripcion" placeholder="Descripción"></textarea>
+
+    <button type="submit">Agregar</button>
+  </form>
+`;
+}
+
+function editarVehiculo(vehiculo) {
+  return `
+  <h1>Editar Vehículo</h1>
+
+  <form action="/vehiculo/editar/${vehiculo._id}" method="POST">
+
+    <input value="${
+      vehiculo.marca
+    }" type="text" name="marca" placeholder="Marca" required>
+    <input value="${
+      vehiculo.modelo
+    }" type="text" name="modelo" placeholder="Modelo" required>
+
+    <select name="colores" placeholder="Color" required>
+      <option value="Blanco" ${
+        vehiculo.colores === "Blanco" ? "selected" : ""
+      }>Blanco</option>
+      <option value="Negro" ${
+        vehiculo.colores === "Negro" ? "selected" : ""
+      }>Negro</option>
+      <option value="Gris" ${
+        vehiculo.colores === "Gris" ? "selected" : ""
+      }>Gris</option>
+      <option value="Rojo" ${
+        vehiculo.colores === "Rojo" ? "selected" : ""
+      }>Rojo</option>
+      <option value="Azul" ${
+        vehiculo.colores === "Azul" ? "selected" : ""
+      }>Azul</option>
+      <option value="Verde" ${
+        vehiculo.colores === "Verde" ? "selected" : ""
+      }>Verde</option>
+    </select>
+
+    <input value="${vehiculo.link}" type="text" name="link" placeholder="Link">
+    <input value="${vehiculo.año}" type="number" name="año" placeholder="Año">
+    <input value="${
+      vehiculo.img
+    }" type="text" name="img" placeholder="Imagen ruta">
+    <input value="${
+      vehiculo.precio
+    }" type="number" name="precio" placeholder="Precio">
+
+    <textarea name="descripcion" placeholder="Descripción">${
+      vehiculo.descripcion
+    }</textarea>
+
+    <button type="submit">Editar</button>
+  </form>
+  `;
+}
+
+export default {
+  createPage,
+  crearListado,
+  createPaginaDetalle,
+  nuevoVehiculo,
+  editarVehiculo,
+  crearListadoMarca
+  // crearListadoFiltrado
+};
+export {
+  createPage,
+  crearListado,
+  createPaginaDetalle,
+  nuevoVehiculo,
+  editarVehiculo,
+  crearListadoMarca
+  // crearListadoFiltrado
+};
+
+
+
+
+

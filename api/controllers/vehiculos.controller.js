@@ -1,9 +1,11 @@
 import * as service from "../../services/vehiculos.service.js"
+import * as views from "../../views/index.js";
 
-function getVehiculos(req, res){
+async function getVehiculos(req, res){
+
     const filtros = req.query
     service.getVehiculos(filtros)
-        .then( (vehiculos) => res.status(200).json(vehiculos) )
+    .then( (vehiculos) => res.status(200).json(vehiculos) )
 }
 
 function getVehiculosId(req, res){

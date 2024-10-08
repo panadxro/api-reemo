@@ -2,8 +2,41 @@ import * as services from "../services/vehiculos.service.js";
 import * as views from "../views/index.js";
 
 const getVehiculos = (req, res) => {
-    services.getVehiculos()
-        .then((vehiculos)=> res.send(views.createPage("Vehiculos", views.crearListado(vehiculos))) )
+  // Obtener los parámetros de los filtros de precio desde la URL
+  const precioMenor = parseInt(req.query.precioMenor) || 6500; // Valor por defecto si no se proporciona
+  const precioMayor = parseInt(req.query.precioMayor) || 30000; // Valor por defecto si no se proporciona
+  const año = parseInt(req.query.año) || '';
+
+
+  // Obtener todos los vehículos desde el servicio
+  services.getVehiculos()
+    .then((vehiculos) => {
+      // Filtrar los vehículos según los parámetros de precio
+      const vehiculosFiltrados = vehiculos.filter((vehiculo) => {
+        const precioFilter = vehiculo.precio >= precioMenor && vehiculo.precio <= precioMayor;
+        const añoFilter = año ? vehiculo.año === año : true;
+        return precioFilter && añoFilter;
+      });
+
+      // Renderizar la página con los vehículos filtrados
+      res.send(views.createPage(
+        "Vehiculos", 
+        views.crearListado(vehiculosFiltrados, { precioMenor, precioMayor, año }),
+      ));
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error al obtener los vehículos");
+    });
+};
+
+const getVehiculosMarca = (req, res) => {
+  const { marca } = req.query;
+  const filtros = { marca };
+
+    services.getVehiculosMarca(filtros)
+        .then((vehiculos)=> res.send(views.createPage("Vehiculos", views.crearListadoMarca(vehiculos))) )
+        .catch(err => res.status(500).send("Error al obtener los vehículos"));
 }
 
 const getVehiculoId = (req, res) => {
@@ -23,12 +56,24 @@ const formVehiculo = (req, res) => {
 const agregarVehiculo = (req, res) => {
   console.log(req.body);
 
-  const { marca, modelo, colores, link } = req.body;
-  if (!marca || !modelo || !colores) {
+  const { marca, modelo, colores, link, precio, año, descripcion, img } = req.body;
+  if (!marca || !modelo || !colores || !precio || !año || !descripcion || !img) {
     return res.status(400).send("Faltan datos necesarios para agregar vehículo");
   }
 
-  services.agregarVehiculo(req.body)
+  const vehiculo = {
+    marca,
+    modelo,
+    colores,
+    link,
+    img: `${img}.jpg`,
+    precio: parseInt(precio),
+    año: parseInt(año),
+    descripcion,
+    eliminado: false        
+  };
+
+  services.agregarVehiculo(vehiculo)
     .then(() => res.redirect("/vehiculos"))
     .catch(err => res.status(500).send("Error al agregar el vehículo"));
 };
@@ -52,4 +97,13 @@ const editarVehiculo = (req, res) => {
       .then( () => res.redirect("/vehiculos") )
 }
 
-export { getVehiculos, getVehiculoId, formVehiculo, agregarVehiculo, eliminarVehiculo, formEditarVehiculo, editarVehiculo }
+export { 
+  getVehiculos, 
+  getVehiculoId, 
+  formVehiculo, 
+  agregarVehiculo, 
+  eliminarVehiculo, 
+  formEditarVehiculo, 
+  editarVehiculo,
+  getVehiculosMarca
+}
