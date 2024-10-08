@@ -23,6 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .idx
+.env
 
 # Servicio de Mongo DB Atlas
 services

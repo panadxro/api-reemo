@@ -1,6 +1,7 @@
 import express from 'express';
 import views from './routes/views.routes.js';
 import apiRoute from './api/routes/views.routes.js'
+import apiUsuario from './api/routes/usuarios.routes.js'
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(views);
 app.use('/api', apiRoute)
+app.use("/api", apiUsuario)
 
 app.get('/', (req, res) => {
   const name = process.env.NAME || '<a href="/vehiculos">Vehículos</a>';

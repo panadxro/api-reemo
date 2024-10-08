@@ -8,55 +8,48 @@ function createPage(titulo, contenido) {
     <title>${titulo}</title>
     </head>
     <body>
-    <nav>
-      <a href="/vehiculos">Inicio</a>
-      <form action="/vehiculo" method="GET">
-        <label for="marca">Selecciona una marca:</label>
-        <select name="marca" id="marca">
-          <option value="Toyota">Toyota</option>
-          <option value="Volkswagen">Volkswagen</option>
-          <option value="Fiat">Fiat</option>
-          <option value="Chevrolet">Chevrolet</option>
-          <option value="Renault">Renault</option>
-          <option value="Ford">Ford</option>
-          <option value="Nissan">Nissan</option>
-          <option value="Honda">Honda</option>
-          <option value="Jeep">Jeep</option>
-        </select>
-        <button type="submit">Buscar</button>
-      </form>
-      <a href='/vehiculo/nuevo' >Nuevo Vehículo</a>
-    </nav>
-      <h1>Vehículos</h1>
+      <nav>
+        <h1><a href="/vehiculos">Reemo</h1>
+        <a href="/vehiculos">Vehiculos</a>
+        <a href="/usuarios">Usuarios</a>
+        <form action="/vehiculo" method="GET">
+          <select name="marca" id="marca">
+            <option value="" disabled selected>Todos</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Volkswagen">Volkswagen</option>
+            <option value="Fiat">Fiat</option>
+            <option value="Chevrolet">Chevrolet</option>
+            <option value="Renault">Renault</option>
+            <option value="Ford">Ford</option>
+            <option value="Nissan">Nissan</option>
+            <option value="Honda">Honda</option>
+            <option value="Jeep">Jeep</option>
+          </select>
+          <button type="submit">Buscar</button>
+        </form>
+        </nav>
       ${contenido}
     </body>
   </html>
   `;
 }
 
-function crearListado(vehiculos, filtros={}) {
-  let html = `<a href='/vehiculo/nuevo'>Nuevo Vehículo</a>`;
-  
-  html += `
-  <form method="GET" action="/vehiculos">
-      <label for="año">Año:</label>
-      <input type="number" name="año" id="año" value="${filtros.año || ''}">
-    <button type="submit">Buscar</button>
-  </form>
-
+function crearListado(vehiculos, filtros) { 
+  let html = `  
   <form action="/vehiculos" method="GET">  
+  <label for="año">Año:</label>
+  <input type="number" name="año" id="año" value="${filtros.año || ''}">
     <label for="precioMenor">Precio Menor:</label>
-    <input type="number" name="precioMenor" id="precioMenor" value="${
-      filtros.precioMenor || "6500"
-    }">
+    <input type="number" name="precioMenor" id="precioMenor" 
+      value="${filtros.precioMenor ? filtros.precioMenor : ''}">
   
     <label for="precioMayor">Precio Mayor:</label>
-    <input type="number" name="precioMayor" id="precioMayor" value="${
-      filtros.precioMayor || "30000"
-    }">
+    <input type="number" name="precioMayor" id="precioMayor" 
+      value="${filtros.precioMayor ? filtros.precioMayor : ''}">
   
     <button type="submit">Filtrar</button>
   </form>
+  <a href='/vehiculo/nuevo' >Nuevo Vehículo</a>
   `;
 
   if (vehiculos.length === 0) {
@@ -65,24 +58,11 @@ function crearListado(vehiculos, filtros={}) {
     html += "<ul>";
     for (let i = 0; i < vehiculos.length; i++) {
       html +=
-        "<li>" +
-        vehiculos[i].marca +
-        " " +
-        vehiculos[i].modelo +
-        " - Precio: " + vehiculos[i].precio +
-        "     <a href=" +
-        "/vehiculos/" +
-        vehiculos[i]._id +
-        " >Ver</a>" +
-        "     <a href=" +
-        "/vehiculo/eliminar/" +
-        vehiculos[i]._id +
-        " >Eliminar</a>" +
-        "     <a href=" +
-        "/vehiculo/editar/" +
-        vehiculos[i]._id +
-        " >Modificar</a>" +
-        "</li>";
+        `<li>${vehiculos[i].marca} ${vehiculos[i].modelo} - ${vehiculos[i].precio}
+          <a href="/vehiculos/${vehiculos[i]._id}">Ver</a>
+          <a href="/vehiculo/eliminar/${vehiculos[i]._id}">Eliminar</a>
+          <a href="/vehiculo/editar/${vehiculos[i]._id}">Modificar</a>
+        </li>`;
     }
     html += "</ul>";
   }
@@ -91,12 +71,35 @@ function crearListado(vehiculos, filtros={}) {
 }
 
 function crearListadoMarca(vehiculos){
-  let html = "<ul>"
-  for( let i = 0; i < vehiculos.length ; i++ ){
-      html += "<li>"+ vehiculos[i].marca + ' ' + vehiculos[i].modelo + "<a href="+ "/vehiculos/" + vehiculos[i]._id +" >Ver</a>"+ "<a href="+ "/vehiculo/eliminar/" + vehiculos[i]._id +" >Eliminar</a>" + "<a href="+ "/vehiculo/modificar/" + vehiculos[i]._id +" >Modificar</a>" + "</li>"
+  if (vehiculos.length === 0) {
+    html += `<p>No se encontraron vehículos con esas especificaciones.</p>`;
+  } else {
+    let html = "<ul>"
+    for( let i = 0; i < vehiculos.length ; i++ ){
+        html += 
+          `<li>${vehiculos[i].marca} ${vehiculos[i].modelo } - ${vehiculos[i].precio}
+            <a href="/vehiculos/${vehiculos[i]._id}">Ver</a>
+            <a href="/vehiculo/eliminar/${vehiculos[i]._id}">Eliminar</a>
+            <a href="/vehiculo/modificar/${vehiculos[i]._id}">Modificar</a>
+          </li>`
+    }
+    html += "</ul>"
+    return html
   }
-  html += "</ul>"
-  return html
+} 
+
+function crearListadoUsuarios(usuarios){
+  if (usuarios.length === 0) {
+    html += `<p>Aún no existen usuarios.</p>`;
+  } else {
+    let html = "<ul>"
+    for( let i = 0; i < usuarios.length ; i++ ){
+        html += 
+          `<li>${usuarios[i].nombre} <a href="/usuario/${usuarios[i]._id}"> Ver</a></li>`
+    }
+    html += "</ul>"
+    return html
+  }
 } 
 
 function createPaginaDetalle(vehiculo) {
@@ -196,14 +199,41 @@ function editarVehiculo(vehiculo) {
   `;
 }
 
+function createUsuarioDetalle(usuario, vehiculos) {
+  console.log(usuario);
+  let html = `
+  <p>ID: ${usuario._id}</p>
+  <p>NOMBRE: ${usuario.nombre}</p>
+  <p>IMAGEN: ${usuario.img}</p>
+  <p>DESCRIPCION: ${usuario.descripcion}</p>
+  <p>HISTORIAL:</p>`
+  if (usuario.historial.length === 0) {
+    html += `<p>Este usuario no ha reservado ningún vehículo aún.</p>`;
+  } else {
+    html += "<ul>";
+    for (let i = 0; i < usuario.historial.length; i++) {
+      html +=
+        `<li>${usuario.historial[i].marca} ${usuario.historial[i].modelo} - ${usuario.historial[i].precio}
+          <a href="/vehiculos/${usuario.historial[i]._id}">Ver</a>
+        </li>`;
+    }
+    html += `</ul>
+    <a href="/usuarios" >atras</a>
+    `;
+  }
+
+  return html;
+}
+
 export default {
   createPage,
   crearListado,
   createPaginaDetalle,
   nuevoVehiculo,
   editarVehiculo,
-  crearListadoMarca
-  // crearListadoFiltrado
+  crearListadoMarca,
+  crearListadoUsuarios,
+  createUsuarioDetalle
 };
 export {
   createPage,
@@ -211,8 +241,9 @@ export {
   createPaginaDetalle,
   nuevoVehiculo,
   editarVehiculo,
-  crearListadoMarca
-  // crearListadoFiltrado
+  crearListadoMarca,
+  crearListadoUsuarios,
+  createUsuarioDetalle
 };
 
 

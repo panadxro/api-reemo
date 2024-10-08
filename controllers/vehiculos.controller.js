@@ -2,11 +2,9 @@ import * as services from "../services/vehiculos.service.js";
 import * as views from "../views/index.js";
 
 const getVehiculos = (req, res) => {
-  // Obtener los parámetros de los filtros de precio desde la URL
-  const precioMenor = parseInt(req.query.precioMenor) || 6500; // Valor por defecto si no se proporciona
-  const precioMayor = parseInt(req.query.precioMayor) || 30000; // Valor por defecto si no se proporciona
+  const precioMenor = parseInt(req.query.precioMenor) || 6500;
+  const precioMayor = parseInt(req.query.precioMayor) || 30000;
   const año = parseInt(req.query.año) || '';
-
 
   // Obtener todos los vehículos desde el servicio
   services.getVehiculos()
@@ -26,7 +24,7 @@ const getVehiculos = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send("Error al obtener los vehículos");
+      res.status(500).send(`<p>Error al obtener los vehículos</p> <a href="/vehiculos">Volver al inicio</a> `);
     });
 };
 
@@ -35,8 +33,8 @@ const getVehiculosMarca = (req, res) => {
   const filtros = { marca };
 
     services.getVehiculosMarca(filtros)
-        .then((vehiculos)=> res.send(views.createPage("Vehiculos", views.crearListadoMarca(vehiculos))) )
-        .catch(err => res.status(500).send("Error al obtener los vehículos"));
+        .then((vehiculos)=> res.send(views.createPage("Vehículos", views.crearListadoMarca(vehiculos))) )
+        .catch(err => res.status(500).send(`<p>No existen vehículos de esa marca</p> <a href="/vehiculos">Volver al inicio</a> `));
 }
 
 const getVehiculoId = (req, res) => {

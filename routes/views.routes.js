@@ -1,5 +1,6 @@
 import express from "express"
 import * as controllers from "../controllers/vehiculos.controller.js";
+import * as usuarios from "../controllers/usuarios.controller.js";
 
 const route = express.Router()
 
@@ -11,5 +12,8 @@ route.get("/vehiculo/eliminar/:id", controllers.eliminarVehiculo)
 route.get("/vehiculo/editar/:id", controllers.formEditarVehiculo)
 route.post("/vehiculo/editar/:id", controllers.editarVehiculo)
 route.get("/vehiculo", controllers.getVehiculosMarca)
+route.get("/usuarios", usuarios.getUsuarios)
+route.get("/usuario/:id", usuarios.getUsuarioId)
+
 
 export default route
