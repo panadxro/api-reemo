@@ -1,30 +1,111 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Layout from '../Layout/Layout';
-import Login from "../login/Login";
-import Register from '../login/Register';
-import ProtectedRouter from '../router/ProtectedRouter';
-import CarList from '../cars/CarList';
-import CarDetail from '../cars/CarDetail';
-import CarEdit from '../cars/CarEdit';
-import CarDelete from '../cars/CarDelete';
-import Close from '../login/Close';
-import Logout from '../login/Logout';
-import CarPublish from "../cars/CarPublish";
+import Layout from "../Layout/Layout";
+import ProtectedRouter from "../router/ProtectedRouter";
 
+const Login = lazy(() => import("../login/Login"));
+const Register = lazy(() => import("../login/Register"));
+const CarList = lazy(() => import("../cars/CarList"));
+const CarDetail = lazy(() => import("../cars/CarDetail"));
+const CarEdit = lazy(() => import("../cars/CarEdit"));
+const CarDelete = lazy(() => import("../cars/CarDelete"));
+const CarPublish = lazy(() => import("../cars/CarPublish"));
+const Close = lazy(() => import("../login/Close"));
+const Logout = lazy(() => import("../login/Logout"));
 const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
-      { path: "/", element: <ProtectedRouter component={<CarList />} /> },
-      { path: "/login", element: <Login /> },
-      { path: "/register", element: <Register /> },
-      { path: "/cars", element: <ProtectedRouter component={<CarList />} /> },
-      { path: "car/:id", element: <ProtectedRouter component={<CarDetail />} /> },
-      { path: "close", element: <ProtectedRouter component={<Close />} /> },
-      { path: "/logout", element: <ProtectedRouter component={<Logout />} /> },
-      { path: "/car/edit/:_id", element: <ProtectedRouter component={<CarEdit />} /> },
-      { path: "/car/delete/:_id", element: <ProtectedRouter component={<CarDelete />} /> },
-      { path: "/car/publish", element: <ProtectedRouter component={<CarPublish />} /> },
+      {
+        path: "/",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<CarList />} />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "/login",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <Login />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "/register",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <Register />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "/cars",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<CarList />} />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "car/:id",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<CarDetail />} />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "close",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<Close />} />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "/logout",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<Logout />} />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "/car/edit/:_id",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<CarEdit />} />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "/car/delete/:_id",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<CarDelete />} />{" "}
+          </Suspense>
+        ),
+      },
+      {
+        path: "/car/publish",
+        element: (
+          <Suspense fallback={<div>Cargando...</div>}>
+            {" "}
+            <ProtectedRouter component={<CarPublish />} />{" "}
+          </Suspense>
+        ),
+      },
     ],
   },
 ]);

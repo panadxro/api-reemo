@@ -1,30 +1,30 @@
 import * as service from "../../services/vehiculos.service.js"
-import * as views from "../../views/index.js";
 
 async function getVehiculos(req, res){
-// Obtenemos los parámetros de paginación desde la URL (por defecto: page = 1, limit = 6)
   const { page = 1, limit = 8 } = req.query;
 
   try {
-      // Convertimos los valores de page y limit a números
       const filtros = {
           page: parseInt(page),
           limit: parseInt(limit),
       };
       
-      // Obtenemos los vehículos paginados
       const { autos, totalPages } = await service.getVehiculos(filtros);
       
-      // Respondemos con los datos y el total de páginas
       res.status(200).json({ autos, totalPages });
   } catch (error) {
       console.error("Error al obtener vehículos:", error);
       res.status(500).json({ mensaje: "Error al obtener vehículos" });
   }
-  /* 
-    const filtros = req.query
-    service.getVehiculos(filtros)
-    .then( (vehiculos) => res.status(200).json(vehiculos) ) */
+}
+
+const getVehiculosMarca = (req, res) => {
+    const { marca } = req.query;
+    const filtros = { marca };
+  
+      service.getVehiculosMarca(filtros)
+          .then((vehiculos)=> res.send(views.createPage("Vehículos", views.crearListadoMarca(vehiculos))) )
+          .catch(err => res.status(500).send(`<p>No existen vehículos de esa marca</p> <a href="/vehiculos">Volver al inicio</a> `));
 }
 
 function getVehiculosId(req, res){
@@ -71,5 +71,6 @@ export {
     crearVehiculo,
     borrarVehiculo,
     reemplazarVehiculo,
-    actualizarVehiculo
+    actualizarVehiculo,
+    getVehiculosMarca
 }

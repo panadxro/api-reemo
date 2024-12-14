@@ -1,5 +1,4 @@
 import express from 'express';
-import views from './routes/views.routes.js';
 import apiRoute from './api/routes/views.routes.js'
 import apiUsuario from './api/routes/usuarios.routes.js'
 import cors from "cors"
@@ -15,7 +14,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use( cors(corsOptions))
 
-app.use(views);
 app.use('/api', apiRoute)
 app.use("/api", apiUsuario)
 
